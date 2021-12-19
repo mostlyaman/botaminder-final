@@ -72,7 +72,7 @@ void play(float hz, int wait);
 void alarm();
 int currentSpeaker = 4;
 int currentEvent = 0;
-int timeWhileAlarmOn;
+long timeWhileAlarmOn;
 bool recordingTimeAlarmOn = false;
 int eventScrollingSpeedCounter = 0;
 bool notHourZero = true;
@@ -80,7 +80,7 @@ bool notMinZero = true;
 bool notSecZero = true;
 String mode = userMode;
 int passedEvents = 0;
-int timeForSetup;
+long timeForSetup;
 bool alarmOn = false;
 LiquidCrystal lcd(9,8,13,12,11,10);
 LiquidCrystal lcd2(9,7,13,12,11,10);
@@ -141,7 +141,7 @@ void loop() {
     }
     
   updateTime();
-  delay(1000-(millis()-timeForSetup)/1000);
+  delay(975-(millis()-timeForSetup)/1000);
   }
 }
 
