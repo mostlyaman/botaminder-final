@@ -210,7 +210,7 @@ void buttonFunction(){
     lcd.print("Alarm Muted!"); lcd.setCursor(0,1);
     lcd.print("Next Alarm -->");
     lcd2.print(eventName[passedEvents]); lcd2.setCursor(0,1);
-    lcd2.print(eventStartTime[passedEvents]); lcd2.print(" : "); lcd2.print(eventEndTime[passedEvents]);
+    lcd2.print(getShortTime(eventStartTime[passedEvents])); lcd2.print(" : "); lcd2.print(getShortTime(eventEndTime[passedEvents]));
     if(recordingTimeAlarmOn){updateTimeBySeconds((millis()-timeWhileAlarmOn)/1000); recordingTimeAlarmOn = false;}
   }
 }
