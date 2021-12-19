@@ -11,6 +11,14 @@
  * Github Repository:
  * ---------------------------------------------------------------------------------------
  * 
+ * ==============================================================================
+ *   CREDITS for Tune Playing Program                                      
+ *   Original Melody from All Star, by Smash Mouth
+ *   Inspiration from https://workshops.hackclub.com/coffin_dance_arduino/
+ *   Music code from bansalrohan18
+ *   https://www.tinkercad.com/things/fMHcz0D6nag
+ * ==============================================================================
+ * 
  * HOW TO USE
  * ==========
  * 
@@ -30,7 +38,7 @@
 // ==============================================================================
 // ==============================================================================
 
-//TOKEN HERE PLEASE
+// TOKEN HERE PLEASE
 
 long time[3] = {8,59,58};
 int events = 3;
@@ -233,8 +241,8 @@ void alarm() {
   float hertz[] = {392, 587.33, 493.88, 493.88, 440, 392, 392, 523.25, 493.88, 493.88, 440, 440, 392, 392, 523.25, 493.88, 493.88, 440, 440, 392, 440, 329.63};
   float wait[] = {200, 70, 100, 300, 100, 200, 130, 200, 70, 70, 70, 70, 200, 70, 70, 70, 70, 70, 70, 70, 70, 1000};
   for(int i = 0; i < 22; i++){
-    play(hertz[i], wait[i]);
-    }
+    if(alarmOn){play(hertz[i], wait[i]);}
+  }
   updateTimeBySeconds((millis()-alarmTime)/1000);
   
 }
