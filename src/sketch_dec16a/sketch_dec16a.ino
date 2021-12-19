@@ -1,6 +1,6 @@
 /*
  * --------------------------------------------------------------------------------------
- * Team LAZYPEOPLE submittion to BUILDABOT Contest.
+ * Team FreshBOTS submittion to BUILDABOT Contest.
  * 
  * This is a project to build a Events Manager/Reminder Bot using Arduino
  * Features include alarms for classes, reminders to stay hydrated, take a walk/break
