@@ -48,7 +48,7 @@ long eventEndTime[3] = {(long)10*3600, (long)11*3600, (long)12*3600};
 int eventScrollingSpeed = 4;
 long waterReminder = (long)3*3600;
 long breakReminder = (long)4*3600;
-long skippingBreak = (long)17*3600;
+long eveningBreak = (long)17*3600;
 String userMode = "manual";
 
 
@@ -82,6 +82,8 @@ String mode = userMode;
 int passedEvents = 0;
 long timeForSetup;
 bool alarmOn = false;
+bool alarmHealthEvents = true; 
+bool alarmNormalEvents = true;
 LiquidCrystal lcd(9,8,13,12,11,10);
 LiquidCrystal lcd2(9,7,13,12,11,10);
 
@@ -102,8 +104,11 @@ void setup() {
 
   //generate Events list
   int t = getLongTime();
-  long healthEvents[3] = {t+waterReminder, t+breakReminder, skippingBreak};
-  if(digitalRead(mutePin) == LOW){mode = "muted  ";}
+  long healthEvents[2] = {t+waterReminder, t+breakReminder};
+  if(mode == "events"){alarmHealthEvents = false;}
+  else if(mode == "health"){alarmNormalEvents = false;}
+  else if(mode == "silent"){alarmHealthEvents = false; alarmNormalEvents = false;}
+  if(digitalRead(mutePin) == LOW){mode = "muted";}
   attachInterrupt(digitalPinToInterrupt(mutePin), muteDevice, CHANGE);
   attachInterrupt(digitalPinToInterrupt(pushButton), buttonFunction, FALLING);
 
@@ -111,11 +116,14 @@ void setup() {
 }
 
 void loop() {
+  long currentTime;
+  currentTime = getLongTime();
+
   if(!digitalRead(mutePin) && !recordingTimeAlarmOn && alarmOn){
     recordingTimeAlarmOn = true;
     timeWhileAlarmOn = millis();
   }
-  if(getLongTime() == eventStartTime[passedEvents] && !recordingTimeAlarmOn){
+  if(currentTime == eventStartTime[passedEvents] && !recordingTimeAlarmOn){
     timeForSetup = millis();
     alarmOn = true;
     lcd.clear(); lcd2.clear();
@@ -124,7 +132,7 @@ void loop() {
     lcd2.print(getShortTime(eventStartTime[passedEvents])); lcd2.print(" - "); lcd2.print(getShortTime(eventEndTime[passedEvents]));
   }
   
-  if(getLongTime() >= eventStartTime[passedEvents]){
+  if(currentTime >= eventStartTime[passedEvents]){
   if(digitalRead(mutePin)){alarm();}
   }else{
   
