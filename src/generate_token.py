@@ -32,8 +32,8 @@ def manual():
     for i in range(no):
         q='enter the title of event '+str(i+1)+':'
         name=input(q)
-        st=int(input('enter start time hour:'))
-        et=int(input('enter end time hour:'))
+        st=(input('enter start time hour:'))
+        et=(input('enter end time hour:'))
         s_name.append(name)
         s_st.append(st)
         s_et.append(et)
@@ -178,7 +178,7 @@ def googlecalendar():
             tryagain = input("Retry Again?.  Enter y/n:").strip()
             if tryagain == "y":
                 googlecalendar()
-            elif try_again == "n":
+            elif tryagain == "n":
                 print("Switching to Manual mode...\n")
                 manual()
             else:
@@ -191,17 +191,17 @@ def googlecalendar():
             for event in events:
                 no+=1
                 s_name.append(event['summary'])
-                s_st.append(event['start']['dateTime'].split('T')[1].split('+')[0])
-                s_et.append(event['end']['dateTime'].split('T')[1].split('+')[0])
+                s_st.append(event['start']['dateTime'].split('T')[1].split('+')[0].split(':')[0:2])
+                s_et.append(event['end']['dateTime'].split('T')[1].split('+')[0].split(':')[0:2])
             n='"'+s_name[0]+'"'
-            st1='(long)'+str(s_st[0])+'*3600'
-            et1='(long)'+str(s_et[0])+'*3600'
+            st1='(long)'+str(s_st[0][0])+'*3600+(long)'+str(s_st[0][1])+'*60'
+            et1='(long)'+str(s_et[0][0])+'*3600+(long)'+str(s_et[0][1])+'*60'
             for i in s_name[1:]:
                 n+=','+'"'+i+'"'
             for i in s_st[1:]:
-                st1+=','+'(long)'+str(i)+'*3600'
+                st1+=','+'(long)'+str(i[0])+'*3600+(long)'+str(i[1])+'*60'
             for i in s_et[1:]:
-                et1+=','+'(long)'+str(i)+'*3600'
+                et1+=','+'(long)'+str(i[0])+'*3600+(long)'+str(i[1])+'*60'
             
             lt=(time.localtime(time.time())[3:6]) 
             print(lt)
@@ -280,6 +280,7 @@ elif mode == "silent" or mode == "5":
         
 else:
     print("WRONG INPUT! SELECT ONE OF THE ABOVE!!!\ntry again")
+    
         
     
     
