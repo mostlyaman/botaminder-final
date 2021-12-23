@@ -1,9 +1,9 @@
 from __future__ import print_function
 import time
 
-
-print('BOTAMINDER TOKEN GENERATOR')
-print('==========================')
+print('==============================')
+print('+ BOTAMINDER TOKEN GENERATOR +')
+print('==============================')
 print('''This script can be used to generate the token used to update the arduino with latest time and events\
 in a quick fashion. If youre opening running this file for the first time, Try googlecalendar mode which can automatically 
 fetch your events from your google calendar.  
@@ -22,7 +22,6 @@ def ask_for_mode():
 
 
 def manual():
-
     no=int(input('enter the number of events'))
     s_name=[]
     s_st=[]
@@ -65,15 +64,11 @@ def manual():
 
 
 def googlecalendar():
-  
+    '''
+    Workflow for OAUTH Authentication referenced from https://qxf2.com/blog/google-calendar-python/
+    '''
     import httplib2
     import os
-     
-    # from apiclient import discovery
-    # Commented above import statement and replaced it below because of
-    # reader Vishnukumar's comment
-    # Src: https://stackoverflow.com/a/30811628
-     
     import googleapiclient.discovery as discovery
     from oauth2client import client
     from oauth2client import tools
@@ -87,9 +82,7 @@ def googlecalendar():
         flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
     except ImportError:
         flags = None
-     
-    # If modifying these scopes, delete your previously saved credentials
-    # at ~/.credentials/calendar-python-quickstart.json
+
     SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
     CLIENT_SECRET_FILE = 'auth/authorizeApp.json'
     APPLICATION_NAME = 'botaminder'
@@ -221,12 +214,14 @@ def googlecalendar():
 
 
 ask_for_mode()
-if mode == "manual" or mode == "2":
-    mode = "manual"
-    manual()
-elif mode == "googlecalendar" or mode == "1":
+if mode == "googlecalendar" or mode == "1":
     mode = "googlecalendar"
     googlecalendar()
+
+elif mode == "manual" or mode == "2":
+    mode = "manual"
+    manual()
+
 elif mode == "healthonly" or mode == "4":
     mode = "health"
     print("HEALTH MODE SELECTED")
@@ -239,6 +234,7 @@ elif mode == "healthonly" or mode == "4":
         googlecalendar()
     else:
         print("Wrong Input.. TRY AGAIN")
+
 elif mode == "eventsonly" or mode == "3":
     mode='events'
     print("Events ONLY MODE SELECTED")
@@ -251,6 +247,7 @@ elif mode == "eventsonly" or mode == "3":
         googlecalendar()
     else:
         print("Wrong Input.. TRY AGAIN")
+
 elif mode == "silent" or mode == "5":
     mode='silent'
     print("SILENT MODE SELECTED")
