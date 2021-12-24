@@ -1,5 +1,6 @@
 from __future__ import print_function
 import time
+import os
 
 print('==============================')
 print('+ BOTAMINDER TOKEN GENERATOR +')
@@ -20,47 +21,158 @@ def ask_for_mode():
     mode1 = mode
 
 
-
 def manual():
-    no=int(input('enter the number of events'))
     s_name=[]
     s_st=[]
     s_et=[]
-    
+    st1=''
+    et1=''
+    n=''
     global mode
-    for i in range(no):
-        q='enter the title of event '+str(i+1)+':'
-        name=input(q)
-        st=(input('enter start time hour:'))
-        et=(input('enter end time hour:'))
-        s_name.append(name)
-        s_st.append(st)
-        s_et.append(et)
-    n='"'+s_name[0]+'"'
-    st1='(long)'+str(s_st[0])+'*3600'
-    et1='(long)'+str(s_et[0])+'*3600'
-    for i in s_name[1:]:
-        n+=','+'"'+i+'"'
-    for i in s_st[1:]:
-        st1+=','+'(long)'+str(i)+'*3600'
-    for i in s_et[1:]:
-        et1+=','+'(long)'+str(i)+'*3600'
+    
+    def writeprofile():
+        lt=(time.localtime(time.time())[3:6])
+        profname=input('enter the profile name in the format <profile"x">:')
+        profiles=os.listdir(str(os.getcwd())+'\profiles').remove('.gitignore.txt')
+        if not profiles:
+            no=int(input('enter the number of events'))
+            for i in range(no):
+                q='enter the title of event '+str(i+1)+':'
+                name=input(q)
+                st=(input('enter start time hour:'))
+                et=(input('enter end time hour:'))
+                s_name.append(name)
+                s_st.append(st)
+                s_et.append(et)
+            n='"'+s_name[0]+'"'
+            st1='(long)'+str(s_st[0])+'*3600'
+            et1='(long)'+str(s_et[0])+'*3600'
+            for i in s_name[1:]:
+                n+=','+'"'+i+'"'
+            for i in s_st[1:]:
+                st1+=','+'(long)'+str(i)+'*3600'
+            for i in s_et[1:]:
+                et1+=','+'(long)'+str(i)+'*3600'    
+            file = open("profile1.txt", 'w')
+            file.write('COPY THIS TOKEN TO ARDUINO SKETCH')
+            file.write('\n\n\n')
+            file.write('long time[3] = {'+str(lt[0])+','+str(lt[1])+','+str(lt[2])+'};\n')
+            file.write('int events = '+str(no)+';\n')
+            file.write('String eventName['+str(no)+'] = {'+n+'};\n')
+            file.write('long eventStartTime[2] = {'+st1+'};\n')
+            file.write('long eventEndTime[2] = {'+et1+'};\n')
+            file.write('int eventScrollingSpeed = 4;'+'\n'+\
+                       'long waterReminder = 3*3600;'+'\n'+\
+                       'long breakReminder = 4*3600;'+'\n'+\
+                       'long skippingBreak = 17*3600;\n')
+            file.write('String userMode = "'+mode+'";')
+            file = open("profile1.txt", 'r')
+            print(file.read())
+            print('\n\n')
+            file.close()
+        else:
+            if profname not in profiles:
+                no=int(input('enter the number of events'))
+                for i in range(no):
+                    q='enter the title of event '+str(i+1)+':'
+                    name=input(q)
+                    st=(input('enter start time hour:'))
+                    et=(input('enter end time hour:'))
+                    s_name.append(name)
+                    s_st.append(st)
+                    s_et.append(et)
+                n='"'+s_name[0]+'"'
+                st1='(long)'+str(s_st[0])+'*3600'
+                et1='(long)'+str(s_et[0])+'*3600'
+                for i in s_name[1:]:
+                    n+=','+'"'+i+'"'
+                for i in s_st[1:]:
+                    st1+=','+'(long)'+str(i)+'*3600'
+                for i in s_et[1:]:
+                    et1+=','+'(long)'+str(i)+'*3600'
+                file = open("profile1.txt", 'w')
+                file.write('COPY THIS TOKEN TO ARDUINO SKETCH')
+                file.write('\n\n\n')
+                file.write('long time[3] = {'+str(lt[0])+','+str(lt[1])+','+str(lt[2])+'};\n')
+                file.write('int events = '+str(no)+';\n')
+                file.write('String eventName['+str(no)+'] = {'+n+'};\n')
+                file.write('long eventStartTime[2] = {'+st1+'};\n')
+                file.write('long eventEndTime[2] = {'+et1+'};\n')
+                file.write('int eventScrollingSpeed = 4;'+'\n'+\
+                           'long waterReminder = 3*3600;'+'\n'+\
+                           'long breakReminder = 4*3600;'+'\n'+\
+                           'long skippingBreak = 17*3600;\n')
+                file.write('String userMode = "'+mode+'";\n')
+                file = open("profile1.txt", 'r')
+                print(file.read())
+                file.close()
+                print('\n\n')
+            else:
+                print('profile already exists enter a new name')
+                writeprofile()
+    
+    def chooseprofile():
+        profiles= os.listdir(str(os.getcwd())+'\profiles').remove('.gitignore.txt')
+        count=1
+        print('select the profile from the list below:\n')
+        for i in profiles:
+            print(str(count)+'. '+i)
+            count+=1
+        profname=int(input(':'))
+        if profname-1 in len(profiles):
+            file=open('profile'+str(profname)+'.txt')
+            print(file.read())
+            file.close()
+            print('\n\n')
         
-    lt=(time.localtime(time.time())[3:6])
-    print("COPY THIS TOKEN TO ARDUINO SKETCH")
-    print('\n\n\n') 
-    print('long time[3] = {'+str(lt[0])+','+str(lt[1])+','+str(lt[2])+'};')
-    print('int events = ',no,';')
-    print('String eventName[',no,'] = {',n,'};')
-    print('long eventStartTime[2] = {',st1,'};')
-    print('long eventEndTime[2] = {',et1,'};')
-    print('int eventScrollingSpeed = 4;'+'\n'+\
-          'long waterReminder = 3*3600;'+'\n'+\
-          'long breakReminder = 4*3600;'+'\n'+\
-          'long skippingBreak = 17*3600;')
-    print('String userMode = "'+mode+'";')
-    print('\n\n')
+            
+    print('Please select an option from the list : ','\n','1 --> choose a profile','\n','2 --> create a new profile','\n',\
+          '3 --> input manually')
 
+    profileoption= input(':') 
+    if profileoption=='1' or profileoption=='choose a profile':
+        if not os.listdir(str(os.getcwd())+'\profiles').remove('.gitignore.txt'):
+            print('\n\nno profiles found try again\n\n')
+            manual()
+        chooseprofile()   
+    elif profileoption=='2' or profileoption=='create a new profile':
+        writeprofile()
+    elif profileoption=='3' or profileoption=='input manually':
+        no=int(input('enter the number of events'))
+        for i in range(no):
+            q='enter the title of event '+str(i+1)+':'
+            name=input(q)
+            st=(input('enter start time hour:'))
+            et=(input('enter end time hour:'))
+            s_name.append(name)
+            s_st.append(st)
+            s_et.append(et)
+        n='"'+s_name[0]+'"'
+        st1='(long)'+str(s_st[0])+'*3600'
+        et1='(long)'+str(s_et[0])+'*3600'
+        for i in s_name[1:]:
+            n+=','+'"'+i+'"'
+        for i in s_st[1:]:
+            st1+=','+'(long)'+str(i)+'*3600'
+        for i in s_et[1:]:
+            et1+=','+'(long)'+str(i)+'*3600'
+            
+        lt=(time.localtime(time.time())[3:6])
+        print("COPY THIS TOKEN TO ARDUINO SKETCH")
+        print('\n\n\n') 
+        print('long time[3] = {'+str(lt[0])+','+str(lt[1])+','+str(lt[2])+'};')
+        print('int events = ',no,';')
+        print('String eventName[',no,'] = {',n,'};')
+        print('long eventStartTime[2] = {',st1,'};')
+        print('long eventEndTime[2] = {',et1,'};')
+        print('int eventScrollingSpeed = 4;'+'\n'+\
+            'long waterReminder = 3*3600;'+'\n'+\
+            'long breakReminder = 4*3600;'+'\n'+\
+            'long skippingBreak = 17*3600;')
+        print('String userMode = "'+mode+'";')
+        print('\n\n')
+    else:
+        manual()
 
 
 def googlecalendar():
@@ -211,6 +323,23 @@ def googlecalendar():
             print('String userMode = "'+mode+'";')
             print('\n\n')
 
+
+
+    file = open("profile1.txt", 'w')
+    file.write('COPY THIS TOKEN TO ARDUINO SKETCH')
+    file.write('\n\n\n')
+    file.write('long time[3] = {'+str(lt[0])+','+str(lt[1])+','+str(lt[2])+'};')
+    file.write('int events = ',no,';')
+    file.write('String eventName[',no,'] = {',n,'};')
+    file.write('long eventStartTime[2] = {',st1,'};')
+    file.write('long eventEndTime[2] = {',et1,'};')
+    file.write('int eventScrollingSpeed = 4;'+'\n'+\
+               'long waterReminder = 3*3600;'+'\n'+\
+               'long breakReminder = 4*3600;'+'\n'+\
+               'long skippingBreak = 17*3600;')
+    file = open("profile1.txt", 'r')
+    print(file.read())
+    file.close()
 
 
 ask_for_mode()
